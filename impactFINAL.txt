@@ -1,0 +1,349 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Creates the Impact Platform which has a main menu that allows the user to either :
+ *  - create a new account (newUser class takes over)
+ *  - sign in account (checks password and then prints user menu)
+ *  - display feed
+ *  - exit
+ *  
+ * The user menu changes depending on the user account's type.
+ * 
+ * @author Tea Laurey
+ * @since 2019-10-16
+ * @version 1.0.0
+ */
+public class Impact extends newUser{
+	
+	Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+	Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * Contains all the update of all users of the platform as a list of strings
+	 */
+	public static ArrayList<String> allUpdates = new ArrayList<String>();
+	
+	/**
+	 * Impact platform constructor.
+	 */
+	public Impact() {
+		
+		int exiting = 0;
+		
+		while(exiting==0) {
+			System.out.println("Main Menu :\n1 - Create a new User\n2 - Act as a User\n3 - Display Feed\n4 - Exit");
+			int choice = myObj.nextInt();
+			
+			switch (choice) {
+	        case 1:
+	        	createNewUser();
+	            break;
+	        case 2:
+	            signIn();
+	            break;
+	        case 3:
+	        	displayFeed();
+	            break;
+	        case 4:
+	        	exiting = 1;
+	            break;
+	        default:
+	        	System.out.println("This is not an option. Please enter a valid option");
+				choice = myObj.nextInt();
+			}
+		}
+	}
+	
+	/**
+	 * Allow the creation of new users.
+	 */
+	public void createNewUser() {
+		
+		System.out.println("What type of account do you want to create ?\n1 - Individual\n2 - Organisation\n3 - Event");
+		int type = myObj.nextInt();
+		String fullName;
+		
+		//if user is a person (has a first and a last name)
+		if(type==1) {
+			System.out.println("Enter first name : ");
+			String firstName = myObj.next();
+			
+			System.out.println("Enter last name : ");
+			String lastName = myObj.next();
+			
+			fullName = firstName + " " + lastName;
+		}
+		
+		//else the user is an org or an event, it has a single name
+		else {
+			System.out.println("Enter name : ");
+			fullName = myObj.next();
+		}
+		
+		//Get username
+		System.out.println("Enter username : ");
+		String username = scan.nextLine();
+		
+		//Get password
+		System.out.println("Enter password : ");
+		String password = myObj.next();
+		
+		//Get bio 
+		System.out.println("Enter bio : ");
+		String bio = myObj.next();
+		
+		//add the new user to the correct list of user and the list of all user
+		if(type==1) {
+			individuals.add(new newUser(type,fullName,username,password, bio));
+		}
+		else if(type==2) {
+			orgs.add(new newUser(type,fullName,username,password, bio));
+		}
+		else if(type==3) {
+			events.add(new newUser(type,fullName,username,password, bio));
+		}
+		
+		allUsers.add(new newUser(type,fullName,username,password, bio));
+	}
+	
+	/**
+	 *  Allow users to sign into their accounts. Checks for their passwords and prints 
+	 *  menu according to the account type.
+	 */
+	public void signIn(){
+		System.out.println("Your account is :\n1 - Individual\n2 - Organisation\n3 - Event Page");
+		int type = myObj.nextInt();
+		int username;
+	
+	
+		if(type==1) {
+			getIndivids();
+			
+			System.out.println("Your Username Number : ");
+			username = myObj.nextInt();
+			while(username < 0 || username > individuals.size() ) {
+				System.out.println("Username does not exist. Try again : ");
+				username = myObj.nextInt();
+			}
+
+			if(passwordCheck(individuals.get(username-1))) {
+				individualUserMenu();
+			}
+			
+		}
+	
+		else if(type==2) {
+			getOrgs();
+			
+			System.out.println("Your Username : ");
+			username = myObj.nextInt();
+			while(username < 0 || username > orgs.size() ) {
+				System.out.println("Username does not exist. Try again : ");
+				username = myObj.nextInt();
+			}
+		
+			if(passwordCheck(orgs.get(username-1))) {
+				organisationUserMenu();
+			}
+		}
+	
+		else if(type==3) {
+			getEvents();
+			
+			System.out.println("Your Username : ");
+			username = myObj.nextInt();
+			while(username < 0 || username > events.size() ) {
+				System.out.println("Username does not exist. Try again : ");
+				username = myObj.nextInt();
+			}
+		
+			if(passwordCheck(events.get(username-1))) {
+				eventPageUserMenu();
+			}
+		}
+	}
+	
+	/**
+	 * Checks if the entered password corresponds to the password registered for the chosen account.
+	 * @param user - the chosen account
+	 * @return true - when password is validated 
+	 */
+	public boolean passwordCheck(newUser user) {
+		
+		System.out.println("Enter password : ");
+		String password = scan.nextLine();
+		while(!password.equals(user.getPassword())) {
+			System.out.println("Wrong password. Try again : ");
+			password = myObj.nextLine();
+			}
+		return true;
+	}
+	
+
+	/**
+	 * Displays all the updates/activities of the chosen user.
+	 * @param u - the chosen user
+	 */
+	public void displayUpdatesFor(newUser u) {
+		
+		String allUpdates  = u.getUpdates();
+		System.out.println(u.getUsername() + " " + allUpdates);
+		
+	}
+
+	/**
+	 * Allow the user to post a message (either alone or with a picture)
+	 * @return update - the message the user wants to post as a formated string
+	 */
+	public void post() {
+		
+		System.out.println("1 - Post a message : \n2 - Post a message with a photo : ");
+		int choice = myObj.nextInt();
+		while (choice > 2) {
+	    	System.out.println("Please enter valid option : ");
+	    	choice = myObj.nextInt();
+	    }
+		
+		if (choice == 1) {
+			System.out.println("Enter message : ");
+			String message = myObj.next();
+			
+			String update = this.getUsername() + " posted : " + message;
+			allUpdates.add(update);
+			
+			System.out.println(update);
+		}
+		
+		else if (choice == 2) {
+			System.out.println("Enter message : ");
+			String message = myObj.next();
+			
+			System.out.println("Enter picture location : ");
+			String pictureL = myObj.nextLine();
+			
+			System.out.println("Enter picture name : ");
+			String pictureN = myObj.next();
+			
+			String update = this.getUsername() + " posted : " + message + "\nWith the picture : " + pictureL + pictureN;
+			allUpdates.add(update);
+			
+			System.out.println(update);
+		}
+	}
+
+	/**
+	 * Creates the option menu for the individual users :
+	 * The user have 4 different options : 
+	 * - post updates (either a message alone or a message with a picture)
+	 * - donate 
+	 * - register for events
+	 * - exit
+	 * 
+	 * Prints an error message when the user inputs wrong choice.
+	 * The menu will loop until user chooses to exit.
+	 * */
+	public void individualUserMenu() {
+		
+		System.out.println("Individual User Menu : ");
+		System.out.println("1 - Post Updates \n2 - Make a donation \n3 - Register for event \n4 - Exit to main : \nYour choice : ");
+		int choice = myObj.nextInt();
+		int exiting = 0;
+		
+		while(exiting == 0) {
+			switch (choice) {
+			case 1:
+				post();
+				break;
+			
+			case 2:
+				donate();
+				break;
+			
+			case 3:
+				register();
+				break;
+		
+			case 4:
+				exiting = 1;
+				break;	
+				
+			default:
+				System.out.println("This is not an option. Please enter a valid option");
+				choice = myObj.nextInt();
+			}	
+		}
+	}
+
+	/**
+	 * Creates the option menu for the organization users :
+	 * The user have 2 options : 
+	 * - post updates (either a message alone or a message with a picture)
+	 * - exit
+	 * 
+	 * Prints an error message when the user inputs wrong choice.
+	 * The menu will loop until user chooses to exit.
+	 * */
+	public void organisationUserMenu() {
+		
+		System.out.println("Organisation User Menu : ");
+		System.out.println("1 - Post \n2 - Exit to main : \nYour choice : ");
+		int choice = myObj.nextInt();
+		int exiting = 0;
+		
+		while(exiting == 0) {
+			switch (choice) {
+			case 1:
+				post();
+				break;
+			
+			case 2:
+				exiting = 1;
+				break;
+			
+			default:
+				System.out.println("This is not an option. Please enter a valid option");
+				choice = myObj.nextInt();
+			}	
+		}
+	}
+	
+	/**
+	 * Creates the option menu for the event users :
+	 * The user have 3 different options : 
+	 * - post updates (either a message alone or a message with a picture)
+	 * - change the date of the event
+	 * - exit
+	 * 
+	 * Prints an error message when the user inputs wrong choice.
+	 * The menu will loop until user chooses to exit.
+	 * */
+	public void eventPageUserMenu() {
+		
+		System.out.println("Event Page User Menu : ");
+		System.out.println("1 - Post \n2 - Change event date : \n3 - Exit to main : \nYour choice : ");
+		int choice = myObj.nextInt();
+		int exiting = 0;
+		while(exiting == 0) {
+			switch (choice) {
+			case 1:
+				post();
+				break;
+			
+			case 2:
+				changeDate();
+				break;
+			
+			case 3:
+				exiting = 1;
+				break;
+			
+			default:
+				System.out.println("This is not an option. Please enter a valid option");
+				choice = myObj.nextInt();
+			}	
+		}
+	}
+	
+	
+}

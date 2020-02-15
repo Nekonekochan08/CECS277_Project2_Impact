@@ -1,0 +1,740 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Creates users of the Impact Platform and provides functions for user manipulation and user actions.
+ * @author Tea Laurey
+ * @since 2019-10-16
+ * @version 1.0.0
+ */
+public class newUser{
+	
+	//ALL USERS
+	/**
+	 * Contains all the update of a user as a list of strings.
+	 */
+	private static ArrayList<String> updates = new ArrayList<String>();
+	private int type;
+	private String name;
+	private String username;
+	private String password;
+	private String bio;
+	
+	//INDIVIDUAL USER
+	private String birthday;
+	private boolean age;
+	private String bankinfo;
+	
+	//ORGANISATION USER
+	private String mailingAddress;
+	private String phoneNb;
+	private String taxExemptNb;
+	
+	//VOLUNTEER PAGE USER
+	private String date;
+	private String time;
+	private String location;
+	private int nbParticipant;
+	
+	//LISTS OF USERS
+	/**
+	 * Contains all the individual users.
+	 */
+	public ArrayList<newUser> individuals = new ArrayList<>();
+	
+	/**
+	 * Contains all the organization users.
+	 */
+	public ArrayList<newUser> orgs = new ArrayList<>();
+	
+	/**
+	 * Contains all the event users.
+	 */
+	public ArrayList<newUser> events = new ArrayList<>();
+	
+	/**
+	 * Contains all the users of the platform.
+	 */
+	public static ArrayList<newUser> allUsers = new ArrayList<>();
+	
+	Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+	Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * Default newUser constructor. 
+	 * */
+	public newUser() {
+		name = "";
+		username = "";
+		password = "";
+		bio = "";
+		type = 0;
+	}
+	
+	
+	/**
+	 * Constructs a newUser with its name, username, password, bio and type.
+	 * There are 3 different types of user : 
+	 *  - 1 for an individual account
+	 *  - 2 for an organization account
+	 *  - 3 for a Volunteer event page
+	 *  
+	 * The function also keeps track of all new users by adding each new user to a list of all users and
+	 *  a list specific to its type.
+	 * @param ntype - the type of the account
+	 * @param name - the name of user
+	 * @param username - the username of user
+	 * @param password - the password of the account
+	 * @param bio - the bio of the account
+	 * */
+	public newUser(int ntype, String name, String username, String password, String bio) {
+		this.type = ntype;
+		
+		this.name = name;
+		
+		this.username = username;
+		
+		this.password = password;
+		
+		this.bio = bio;
+		
+		if(type==1) {
+			individuals.add(this);
+			allUsers.add(this);
+		}
+		
+		else if(type==2) {
+		    orgs.add(this);
+		    allUsers.add(this);
+		}
+		
+		else if(type==3) {
+			this.nbParticipant = 0;
+		    events.add(this);
+		    allUsers.add(this);
+		}
+		
+	}
+	
+	/**
+	 * Constructs an individual type of account and adds it to the according list of users.
+	 * @param ntype - the type of account
+	 * @param name - the name of user
+	 * @param username - the username of user
+	 * @param password - the password of the account
+	 * @param bio - the bio of the account
+	 * @param bDay - the birthday of the user
+	 * */
+	public newUser(int ntype, String name, String username, String password, String bio, String bDay) {
+		this.type = ntype;
+		
+		this.name = name;
+		
+		this.username = username;
+		
+		this.password = password;
+		
+		this.bio = bio;
+		
+		this.birthday = bDay;
+		
+		this.bankinfo = "";
+		
+		individuals.add(this);
+		allUsers.add(this);
+	}
+	
+	/**
+	 * Constructs an organization type of account and adds it to the according list of users.
+	 * @param ntype - the type of account
+	 * @param name - the name of user
+	 * @param username - the username of user
+	 * @param password - the password of the account
+	 * @param bio - the bio of the account
+	 * @param address - the mailling address of the user
+	 * @param phone - the phone number of the user
+	 * @param taxNb - the tax exempt number of the user
+	 * @param bank - the bank account number of the user
+	 * */
+	public newUser(int ntype, String name, String username, String password, String bio, String address, String phone, String taxNb, String bank) {
+		this.type = ntype;
+		
+		this.name = name;
+		
+		this.username = username;
+		
+		this.password = password;
+		
+		this.bio = bio;
+		
+		this.mailingAddress = address;
+		
+		this.phoneNb = phone;
+		
+		this.taxExemptNb = taxNb;
+		
+		this.bankinfo = bank;
+		
+		orgs.add(this);
+		allUsers.add(this);
+	}
+	
+	/**
+	 * Constructs an event type of account and adds it to the according list of users. The type of the account is initialized 
+	 * directly in the method.
+	 * @param name - the name of user
+	 * @param username - the username of user
+	 * @param password - the password of the account
+	 * @param bio - the bio of the account
+	 * @param date - the date of the event
+	 * @param time - the time of the event
+	 * @param location - the location of the event
+	 * @param phone - the contact number of the event
+	 * */
+	public newUser(String name, String username, String password, String bio, String date, String time, String location, String phone) {
+		this.type = 3;
+		
+		this.name = name;
+		
+		this.username = username;
+		
+		this.password = password;
+		
+		this.bio = bio;
+		
+		this.date = date;
+		
+		this.time = time;
+		
+		this.location = location;
+		
+		this.phoneNb = phone;
+		
+		events.add(this);
+		allUsers.add(this);
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////GETTERS///////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Get the type of account.
+	 * @return type - integer
+	 * */
+	public int getType() {
+		return this.type;
+	}
+	
+	/**
+	 * Get the name of user.
+	 * @return name - string
+	 * */
+	public String getName() {
+		return this.name;
+	}
+	
+	
+	/**
+	 * Get the username of user.
+	 * @return username - string
+	 * */
+	public String getUsername() {
+		return this.username;
+	}
+	
+	/**
+	 * Get the password of the account.
+	 * @return password - string
+	 * */
+	public String getPassword() {
+		return this.password;
+	}
+	
+	/**
+	 * Get the bio of user.
+	 * @return bio - string
+	 * */
+	public String getBio() {
+		return this.bio;
+	}
+	
+	/**
+	 * Get the birthday of user.
+	 * @return birthday - formated string of type XX/XX/XXXX
+	 * */
+	public String getbDay() {
+		return this.birthday.replaceFirst("(\\d{2})(\\d{2})(\\d+)", "$1/$2/$3");
+	}
+	
+	/**
+	 * The age value is true if the user is 18+ and false if the user is under-aged.
+	 * This method initializes age and returns it.
+	 * @return age - boolean
+	 * */
+	public boolean getAge() {
+		
+		String a = this.birthday.substring(4);
+		int i=Integer.parseInt(a);
+		if(2019 - i >= 18) {
+			this.age = true;
+		}
+		else {
+			this.age = false;
+		}
+		
+		return this.age;
+	}
+	
+	/**
+	 * Get the mailing address of the account.
+	 * @return mailingAddress - string of the address of the account
+	 * */
+	public String getMailAdd() {
+		return mailingAddress;
+	}
+	
+	/**
+	 * Get the bank info of the account.
+	 * @return bankinfo - formated string of type : 0000 0000 0000
+	 * */
+	public String getBank() {
+		return bankinfo.replaceFirst("(\\d{4})(\\d{4})(\\d+)", "$1 $2 $3");
+	}
+	
+	/**
+	 * Get the phone number of the user
+	 * @return phoneNb - formated string of type : (000) 000-0000
+	 * */
+	public String getPhone() {
+		return phoneNb.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+	}
+	
+	/**
+	 * Get the tax exempt# of the account
+	 * @return taxExemptNb - string
+	 * */
+	public String getTaxNb() {
+		return taxExemptNb;
+	}
+	
+	/**
+	 * Get the number of participants of an event.
+	 * @return nbParticipant - integer 
+	 * */
+	public int getNbParticipant() {
+		return nbParticipant;
+	}
+	
+	/**
+	 * Get the location of an event.
+	 * @return location - string 
+	 * */
+	public String getLocation() {
+		return location;
+	}
+	
+	/**
+	 * Get the date of an event.
+	 * @return date - formated string of type : 00/00/0000
+	 * */
+	public String getDate() {
+		return date.replaceFirst("(\\d{2})(\\d{2})(\\d+)", "$1/$2/$3");
+	}
+	
+	/**
+	 * Get the time of an event.
+	 * @return time - string
+	 * */
+	public String getTime() {
+		return time;
+	}
+	
+	/**
+	 * Get all updates of the user (or posts of the user) and return them as a string
+	 * @return allUpdates - string
+	 * */
+	public String getUpdates() {
+		
+		String updateString = null;
+		
+		for (int i=0; i<updates.size(); i++) {
+			updateString = updates.get(i) + "\n";
+		}
+		
+		return updateString;
+	}
+	
+	/**
+	 * Prints all the Individual accounts to the user.
+	 * */
+	public void getIndivids() {
+		System.out.println("Individual Accounts : ");
+		
+		for(int i = 0; i<individuals.size();i++) {
+			String idName = individuals.get(i).getUsername();
+			System.out.println((i+1) + ". " + idName);
+		}
+	}
+	
+	/**
+	 * Prints all the Organisation accounts to the user.
+	 * */
+	public void getOrgs() {
+		System.out.println("Organisation Accounts : ");
+		
+		for(int i = 0; i<orgs.size();i++) {
+			String orgName = orgs.get(i).getUsername();
+			System.out.println((i+1) + ". " + orgName);
+		} 
+	}
+	
+	/**
+	 * Prints all the Events accounts to the user.
+	 * */
+	public void getEvents() {
+		System.out.println("Event Accounts : ");
+		
+		for(int i = 0; i<events.size();i++) {
+			String eventName = events.get(i).getUsername();
+			System.out.println((i+1) + ". " + eventName);
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////	
+//////////////////////////////////////////SETTERS///////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Sets the name to the given name.
+	 * @param newName - string
+	 * */
+	public void setName(String newName) {
+		this.name = newName;
+	}
+	
+	/**
+	 * Sets the type to the given type.
+	 * @param newType - integer
+	 * */
+	public void setType(int newType) {
+		this.type = newType;
+	}
+	
+	/**
+	 * Sets the username to the given username.
+	 * @param newUsername - string
+	 * */
+	public void setUsername(String newUsername) {
+		this.username = newUsername;
+	}
+	
+	/**
+	 * Sets the password to the given password.
+	 * @param newPassword - string
+	 * */
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
+	/**
+	 * Sets the bio text to the given text.
+	 * @param newBio - string
+	 * */
+	public void setBio(String newBio) {
+		this.bio = newBio;
+	}
+	
+	/**
+	 * Sets the birthday to the given one and updates the corresponding age value.
+	 * @param newBio - string
+	 * */
+	public void setBday(String newBday) {
+		this.birthday = newBday;
+		this.getAge();
+	}
+	
+	/**
+	 * Sets the bank info of the account to the given one.
+	 * @param newBank - string
+	 * */
+	public void setBankInfo(String newBank) {
+	    this.bankinfo = newBank; 
+	}
+	
+	/**
+	 * Sets the mailling address of the account to the given one.
+	 * @param mailAdd - string
+	 * */
+	public void setMailAdd(String mailAdd) {
+		this.mailingAddress = mailAdd;
+	}
+	
+	/**
+	 * Sets the phone number of the account to the given one.
+	 * @param newPhone - string
+	 * */
+	public void setPhone(String newPhone) {
+		this.phoneNb = newPhone;
+	}
+	
+	/**
+	 * Sets the tax exempt number of the account to the given one.
+	 * @param newTax - string
+	 * */
+	public void setTax(String newTax) {
+		this.taxExemptNb = newTax;
+	}
+	
+	/**
+	 * Sets the date of an event to given date.
+	 * @param newdate - string
+	 * */
+	public void setDate(String newdate) {
+		this.date = newdate;
+	}
+	
+	/**
+	 * Sets the time of an event to given time.
+	 * @param newTime - string
+	 * */
+	public void setTime(String newTime) {
+		this.time = newTime;
+	}
+	
+	/**
+	 * Sets the location of an event to given one.
+	 * @param newLocation - string
+	 * */
+	public void setLocation(String newLocation) {
+		this.location = newLocation;
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////OTHER///////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Update the # of participant to an event every time a user registers.
+	 * @return the updated number of participants as a formated string to print for the users
+	 * */
+	public String register() {
+		
+		getEvents();
+		System.out.println("Event to register : ");
+		int eventName = myObj.nextInt();
+		while(eventName < 0 || eventName > events.size() ) {
+			System.out.println("Event does not exist. Try again : ");
+			eventName = myObj.nextInt();
+		}
+		
+		events.get(eventName-1).nbParticipant += 1;
+		String returnvalue = events.get(eventName-1).name + " now have" + nbParticipant + " registered volunteers. Please join us!";
+		
+		return returnvalue;
+	}
+	
+	/**
+	 * Update the number of participants to an event.
+	 * */
+	public void addParticipant(newUser event) {
+		event.nbParticipant += 1;
+	}
+	
+	/**
+	 * Ask the user for the new date of the event and updates it.
+	 * */
+	public void changeDate() {
+		
+		System.out.println("Enter new date and time of the event : ");
+		String newDate = myObj.nextLine();
+
+		this.setDate(newDate);
+	}
+	
+	/**
+	 * Allow the user to post a given message and adds it to the updates.
+	 * @param message - string
+	 * */
+	public void postMsg(String message) {
+		String update = this.getUsername() + " posted : " + message;
+		updates.add(update);
+	}
+	
+	/**
+	 * Allow the user to post a given message with an image and adds it to the updates.
+	 * @param message - string
+	 * */
+	public void postMsgImg(String message) {
+		String update = this.getUsername() + " posted image with the message : " + message;
+		updates.add(update);
+	}
+	
+	/**
+	 * Allow the user to donate a amount of money to the chosen cause (organization or event).
+	 * Checks if user is not underaged before allowing him/her to donate.
+	 * @param type - int
+	 * @param donationR - newUser
+	 * @param donationAmount - int
+	 * */
+	public void donate(int type, newUser donationR, int donationAmount) {
+		
+		String donation ="";
+
+		if (this.getAge() == true) {
+			if (type == 2) {
+				donation = this.getUsername() + " donated $" + donationAmount + " to the organization " + donationR.getName();
+			}
+			else if (type == 3) {
+				donation = this.getUsername() + " donated $" + donationAmount + " to the event " + donationR.getName();
+			}
+		}
+		else {
+			donation = this.getUsername() + " tried to donate but is underaged.";
+		}
+		updates.add(donation);
+	}
+	
+	/**
+	 * Allow the user to donate money to an organization if he/she is not underaged.
+	 */
+	public void donate() {
+		if (this.getAge() == false) {
+			String donation = this.getUsername() + " tried to donate but is underaged.";
+			updates.add(donation);
+		}
+	}
+	
+	/**
+	 * Allow the user to register for a given event and updates the number of participants of the event.
+	 * @param event - newUser
+	 */
+	public void register(newUser event) {
+		addParticipant(event);
+		String registration = event.getName() + " now have " + event.getNbParticipant() + " registered volunteers. Please join us!";
+		updates.add(registration);
+	}
+	
+	/**
+	 * Displays all the information about the user.
+	 * */
+	public void display() {
+		if(this.type == 1) {
+			System.out.println("Individual");
+			System.out.println("Name : " + this.getName());
+			System.out.println("Username : " + this.getUsername());
+			System.out.println("Password : " + this.getPassword());
+			System.out.println("Bio : " + this.getBio());
+			System.out.println("DOB : " + this.getbDay());
+			System.out.println("Bank Acct. Num : " + this.getBank());
+			System.out.println();
+		}
+		else if(this.type == 2) {
+			System.out.println("Organization");
+			System.out.println("Name : " + this.getName());
+			System.out.println("Username : " + this.getUsername());
+			System.out.println("Password : " + this.getPassword());
+			System.out.println("Bio : " + this.getBio());
+			System.out.println("Address : " + this.getMailAdd());
+			System.out.println("Phone : " + this.getPhone());
+			System.out.println("Tax EN : " + this.getTaxNb());
+			System.out.println("Bank Acct. # : " + this.getBank());
+			System.out.println();
+		}
+		if(this.type == 3) {
+			System.out.println("Event Page");
+			System.out.println("Name : " + this.getName());
+			System.out.println("Username : " + this.getUsername());
+			System.out.println("Password : " + this.getPassword());
+			System.out.println("Bio : " + this.getBio());
+			System.out.println("Date : " + this.getDate());
+			System.out.println("Time : " + this.getTime());
+			System.out.println("Location : " + this.getLocation());
+			System.out.println("Contact # : " + this.getPhone());
+			System.out.println();
+		}
+	}
+	
+	/**
+	 * Displays the feed with all updates of all users on the screen. Delete all updates once it was
+	 * displayed to the user.
+	 * */
+	public static void displayFeed() {
+		
+		for(int i = 0; i<updates.size(); i++) {
+			System.out.println(updates.get(i)+"\n");
+		}
+		updates.clear();
+	}
+	
+	/**
+	 * Main function / tester of the program
+	 * */
+	public static void main(String[] args)
+	   {
+		///CREATE USERS
+		newUser jane = new newUser(1,"Jane Doe","SerengtiJane","XxX123", "Biology major @CSULB. Lover of the outdoors and anything creepy crawly.","08161997");
+		
+		newUser mateo = new newUser(1,"Mateo Stevens","MathMatt","fortniteislifejk", "Books, pizza, and camping trips please.","05032005");
+		
+		newUser sealBeach = new newUser("Seal Beach Clean-Up","SealBeachCleanUp","sSBcup", "A group of caring neighbors looking out for our beaches.",
+										"10122019","9am to noon","Seal Beach Municipal Pier, Old Towne, CA 90740","5625555555");
+		
+		newUser WWF = new newUser(2,"World Wide Fund for Nature","WWF","1234", 
+				                    "Working to conserve nature and reduce the most pressing threats to the diversity of life on Earth.",
+				                    "1250 24th Street, N.W. Washington, DC 20037","2022934800","52-1693387","123456789012");
+		
+		newUser girlS = new newUser(2,"Girl Scouts of the USA","GirlScoutsUSA","12345", 
+				                     "Offering the best leadership development experi- ence for girls in the world..",
+				                     "420 Fifth Avenue at 37th Street – Ground Floor.","8004787248","13-1624016","9999000011112222");	
+		
+		//TEST USERS
+		System.out.println("DISPLAY EACH USERS : \n");
+		jane.display();
+		mateo.display();
+		sealBeach.display();
+		WWF.display();
+		girlS.display();
+		
+		sealBeach.postMsg("Please join us this Saturday in our monthly clean up efforts of Seal Beach. Children" + 
+				"under 16 years old are welcome with the company of an adult guardian.");
+		
+		WWF.postMsgImg("Happy Earth Day! You can help protect future Earth days with a donation" + 
+				" to World Wildlife Fund.  Thank you for your support.");
+		
+		girlS.postMsgImg("Happy Earth Day from Lassen National Park!");
+		
+		WWF.postMsgImg("The Paris Agreement is the world’s collective response to addressing climate change in the years to come. "
+				+ "Although the US government has signaled its intention to withdraw from this global pact, America’s cities, states, "
+				+ "and businesses are working with world leaders to turn the promise of that agreement into concrete action.");
+		
+		jane.donate(2, WWF, 20);
+		jane.postMsgImg("Happy Earth Day everybody! Here’s a little throwback to 6 year old me on our first trip to Serengeti National Park. "
+				+ "Thank you mom and dad for instilling in me a love and respect for nature at a young age. <3");
+		
+		WWF.postMsgImg("Thanks to donations from people like you we have been able to support initiative REDD+. "
+				+ "This initiative offers financial incentives to developing countries that create and implement "
+				+ "strategies to manage and use their forests responsibly.");
+		WWF.postMsg("A shoutout to @GirlScoutsUSA! for your generous contributions to our cause and for" + 
+				" empowering the next generation of female conservationists!");
+		
+		girlS.postMsg("@WWF thanks for the shoutout! Thank YOU for all your efforts in protecting the beauty of this planet!");
+		
+		System.out.println("DISPLAY FEED 1 : \n");
+		displayFeed();
+		
+		
+		sealBeach.setDate("10192019");
+		sealBeach.postMsg("Please join us this Saturday in our monthly clean up efforts of Seal Beach. Children" + 
+				" under 16 years old are welcome with the company of an adult guardian.");
+		
+		jane.register(sealBeach);
+		
+		mateo.donate();
+		mateo.register(sealBeach);
+		
+		System.out.println("DISPLAY FEED 2 : \n");
+		displayFeed();
+	   }
+}
+

@@ -1,0 +1,426 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.GregorianCalendar;
+
+/**
+ * Creates users of the Impact Platform and provides functions for user manipulation.
+ * @author Tea Laurey
+ * @since 2019-10-16
+ * @version 1.0.0
+ */
+public class newUser{
+	/**
+	 * Contains all the update of a user as a list of strings
+	 */
+	public ArrayList<String> updates;
+	
+	/**
+	 * Contains all the update of all users of the platform as a list of strings
+	 */
+	public ArrayList<String> allUpdates;
+	
+	//ALL USERS
+	private int type;
+	private String name;
+	private String username;
+	private String password;
+	private String bio;
+	
+	//INDIVIDUAL USER
+	private GregorianCalendar birthday;
+	private int bankinfo;
+	
+	//ORGANISATION USER
+	private String mailingAddress;
+	private int phoneNb;
+	private int taxExemptNb;
+	
+	//VOLUNTEER PAGE USER
+	private String date;
+	private String location;
+	private int nbParticipant;
+	
+	//LISTS OF USERS
+	/**
+	 * Contains all the individual users
+	 */
+	public ArrayList<newUser> individuals = new ArrayList<>();
+	
+	/**
+	 * Contains all the organization users
+	 */
+	public ArrayList<newUser> orgs = new ArrayList<>();
+	
+	/**
+	 * Contains all the event users
+	 */
+	public ArrayList<newUser> events = new ArrayList<>();
+	
+	/**
+	 * Contains all the users of the platform
+	 */
+	public ArrayList<newUser> allUsers = new ArrayList<>();
+	
+	Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+	Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * constructs an empty user 
+	 * */
+	public newUser() {
+		name = "";
+		username = "";
+		password = "";
+		bio = "";
+		type = 0;
+	}
+	
+	
+	/**
+	 * Constructs a newUser with its name, username, password, bio and type.
+	 * There are 3 different types of user : 
+	 *  - 1 for an individual account : function will ask for user birthday and bank info if 18+
+	 *  - 2 for an organization account : function will ask for mailing address, phone#, tax-exempt# and bank info
+	 *  - 3 for a Volunteer event page : function will ask for date&time of event, location, contact#
+	 *  
+	 *  The function also keeps track of all new users by adding each new user to a list of all users and
+	 *  a list specific to its type.
+	 * @param ntype - the type of user
+	 * @param name - the name of user
+	 * @param username - the username of user
+	 * @param password - the password of the account
+	 * @param bio - the bio of the account
+	 * */
+	public newUser(int ntype, String name, String username, String password, String bio) {
+		this.type = ntype;
+		
+		this.name = name;
+		
+		this.username = username;
+		
+		this.password = password;
+		
+		this.bio = bio;
+		
+		if(type==1) {
+			System.out.println("Enter birth year : ");
+			int birthY = myObj.nextInt();
+			
+			System.out.println("Enter birth month : ");
+			int birthM = myObj.nextInt();
+			
+			System.out.println("Enter birth day : ");
+			int birthD = myObj.nextInt();
+						
+			this.birthday = new GregorianCalendar(birthY-1900, birthM, birthD);
+			
+			if (2019 - birthY >= 18)
+			{
+				System.out.println("Do you want to set up your banking informations to donate ? \nIf so, enter 1 else enter 2");
+				int response = myObj.nextInt();
+				if(response == 1) {
+					setBankInfo();
+				}
+				System.out.println("Welcome!");
+			}
+			else {
+				System.out.println("Welcome!");				
+			}
+		}
+		
+		else if(type==2) {
+			System.out.println("Enter mailing address :");
+		    String mailAdd = myObj.nextLine();
+		    this.mailingAddress = mailAdd;
+		    
+		    System.out.println("Enter bank information for donations :");
+		    int bankInfo = scan.nextInt();
+		    this.bankinfo = bankInfo;
+		    
+		    System.out.println("Enter phone number :");
+		    int phone = myObj.nextInt();
+		    this.phoneNb = phone;
+		    
+		    System.out.println("Enter Tax Exempt Number :");
+		    int tax = scan.nextInt();
+		    this.taxExemptNb = tax;
+		    
+		    orgs.add(this);
+		    allUsers.add(this);
+		}
+		
+		else if(type==3) {
+			nbParticipant = 0;
+			
+			System.out.println("Enter date and time of the event :");
+		    String Date = scan.nextLine();
+		    this.date = Date;
+		    
+		    System.out.println("Enter location of the event :");
+		    String Location = myObj.nextLine();
+		    this.location = Location;
+		    
+		    System.out.println("Enter phone number :");
+		    int phone = scan.nextInt();
+		    this.phoneNb = phone;
+		    
+		    events.add(this);
+		    allUsers.add(this);
+		}
+		
+	}
+	
+	/**
+	 * Returns the type of account
+	 * @return type - integer
+	 * */
+	public int getType() {
+		return this.type;
+	}
+	
+	/**
+	 * Returns the name of user
+	 * @return name - string
+	 * */
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
+	 * Returns the username of user
+	 * @return username - string
+	 * */
+	public String getUsername() {
+		return this.username;
+	}
+	
+	/**
+	 * Returns the password of the account
+	 * @return password - string
+	 * */
+	public String getPassword() {
+		return this.password;
+	}
+	
+	/**
+	 * Returns the bio of user
+	 * @return bio - string
+	 * */
+	public String getBio() {
+		return this.bio;
+	}
+	
+	/**
+	 * Gets all updates of the user (or posts of the user) and return them as a string
+	 * @return allUpdates - string of all updates of the user
+	 * */
+	public String getUpdates() {
+		
+		String allUpdates = null;
+		for (int i=0; i<updates.size(); i++) {
+			
+			allUpdates = updates.get(i) + "\n";
+			
+		}
+		return allUpdates;
+		
+	}
+	
+	/**
+	 * Prints all the Individual accounts to the user.
+	 * */
+	public void getIndivids() {
+		System.out.println("Individual Accounts : ");
+		
+		for(int i = 0; i<individuals.size();i++) {
+			String idName = individuals.get(i).getUsername();
+			System.out.println((i+1) + ". " + idName);
+		}
+	}
+	/**
+	 * Prints all the Organisation accounts to the user.
+	 * */
+	public void getOrgs() {
+		System.out.println("Organisation Accounts : ");
+		
+		for(int i = 0; i<orgs.size();i++) {
+			String orgName = orgs.get(i).getUsername();
+			System.out.println((i+1) + ". " + orgName);
+		} 
+	}
+	
+	/**
+	 * Prints all the Events accounts to the user.
+	 * */
+	public void getEvents() {
+		System.out.println("Event Accounts : ");
+		
+		for(int i = 0; i<events.size();i++) {
+			String eventName = events.get(i).getUsername();
+			System.out.println((i+1) + ". " + eventName);
+		}
+	}
+	
+	/**
+	 * sets the bio text to the given text
+	 * @param newBio - the new Bio
+	 * */
+	public void setBio(String newBio) {
+		this.bio = newBio;
+	}
+	
+	/**
+	 * sets the password to the given password
+	 * @param newPassword - the new password
+	 * */
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
+	/**
+	 * sets the username to the given username
+	 * @param newUsername - the new username
+	 * */
+	public void setUsername(String newUsername) {
+		this.username = newUsername;
+	}
+	
+	/**
+	 * Displays username of the user
+	 * */
+	public void display() {
+		System.out.println(this.username);
+	}
+	
+	/**
+	 * Update/Ask the bank info of the account.
+	 * */
+	public void setBankInfo() {
+	    
+		System.out.println("Enter card number :");
+	    this.bankinfo = myObj.nextInt();
+	    
+	}
+	
+	/**
+	 * Get the mailing address of the account
+	 * @return mailingAddress - string of the address of the account
+	 * */
+	public String getMailAdd() {
+		return mailingAddress;
+	}
+	
+	/**
+	 * Get the bank info of the account
+	 * @return bankinfo - int account number
+	 * */
+	public int getBank() {
+		return bankinfo;
+	}
+	
+	/**
+	 * Get the phone number of the user
+	 * @return phoneNb - int phone#
+	 * */
+	public int getPhone() {
+		return phoneNb;
+	}
+	
+	/**
+	 * Get the tax exempt# of the account
+	 * @return taxExemptNb - int tax#
+	 * */
+	public int getTaxNb() {
+		return taxExemptNb;
+	}
+	
+	/**
+	 * Get the number of participants of an event
+	 * @return nbParticipant - integer number of people participating to event
+	 * */
+	public int getNbParticipant() {
+		return nbParticipant;
+	}
+	
+	/**
+	 * Get the location of an event
+	 * @return location - string location of the event
+	 * */
+	public String getLocation() {
+		return location;
+	}
+	
+	/**
+	 * Get the date of an event
+	 * @return date - string event date
+	 * */
+	public String getDate() {
+		return date;
+	}
+	
+	/**
+	 * Update the date of an event to given date
+	 * @param newdate - string the updated event date
+	 * */
+	public void setDate(String newdate) {
+		
+		this.date = newdate;
+	}
+	
+	/**
+	 * Update the # of participant to an event every time a user registers.
+	 * @return the updated number of participants as a formated string to print for the users
+	 * */
+	public String registered() {
+		
+		nbParticipant = getNbParticipant();
+		nbParticipant += 1;
+		String returnvalue = name + " now have" + nbParticipant + " registered volunteers. Please join us!";
+		
+		return returnvalue;
+	}
+	
+	/**
+	 * Get the individual users
+	 * @return individuals - arraylist of all individual types of users
+	 * */
+	public ArrayList<newUser> getIndividualUsers(){
+		return individuals;
+	}
+	
+	/**
+	 * Get the organization users
+	 * @return orgs - arraylist of all organization types of users
+	 * */
+	public ArrayList<newUser> getOrgUsers(){
+		return orgs;
+	}
+	
+	/**
+	 * Get the event users
+	 * @return events - arraylist of all event types of users
+	 * */
+	public ArrayList<newUser> getEventUsers(){
+		return events;
+	}
+	
+	/**
+	 * Get all registered users
+	 * @return allUsers - arraylist of all users
+	 * */
+	public ArrayList<newUser> getAllUsers(){
+		return allUsers;
+	}
+	
+	/**
+	 * Update the date of an event by asking the user for the new date
+	 * */
+	public void changeDate() {
+		
+		System.out.println("Enter new date and time of the event : ");
+		String newDate = myObj.nextLine();
+
+		this.setDate(newDate);
+	}
+}
+
